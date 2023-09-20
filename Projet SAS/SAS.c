@@ -79,6 +79,9 @@ int main() {
             printf("Combien de tâches voulez-vous ajouter ? ");
             scanf("%d", &nbr_ln);
             Ajouter(nbr_ln, list, &count);
+            printf("ajouter avec succe");
+
+        case 4:
             Aff(count, list);
 
     }
