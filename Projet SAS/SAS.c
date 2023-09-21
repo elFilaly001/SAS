@@ -14,6 +14,7 @@ void Ajouter(int a, Lst list[], int *count) {
 
     for (int i = 0; i < a; i++) {
         list[*count].Id=n;
+        printf("-------------------TASK%d\n",i+1);
         printf("titre : ");
         scanf("%s", list[*count].title);
         getchar();
@@ -149,12 +150,13 @@ void rechID(int rech, Lst list[], int lng)
 
 }
 
-/*void rechTLT(char rech[], Lst list[], int lng)
+void rechTLT(char rech[], Lst list[], int lng)
 {
     for (int i = 0; i < lng; i++)
     {
-        if (rech[] == list[i].title)
+        if (strcmp(rech,list[i].title)==0)
         {
+            printf("---------------------TASK%d\n",i+1);
             printf("ID = %d\n", list[i].Id);
             printf("titre = %s\n", list[i].title);
             printf("Description: %s\n", list[i].desc);
@@ -166,19 +168,31 @@ void rechID(int rech, Lst list[], int lng)
             }else if (list[i].statue==3){
                 printf("statue : finalisee\n");
             }
-
-
+            break;
         }
     }
 
-}*/
+}
 
 
-
+void stats(Lst list[]){
+    int c,f;
+    for (int i=0;i<list;i++){
+        if(list[i].statue==3){
+            c++;
+        }
+        else if (list[i].statue==1 || list[i].statue==2){
+            f++;
+        }
+    }
+    printf("le nombre de TASK fini s'ont : %d" , c);
+    printf("le nombre de TASK non fini s'ont : %d", f);
+}
 
 int main() {
-    int S, nbr_ln, count = 0,index,rch,chrch;
+    int S, nbr_ln, count = 0,index,rch,chrch,st;
     Lst list[100];
+    char rh[100];
     int lng = sizeof(list)/sizeof(list[0]);
 
     do {
@@ -231,12 +245,15 @@ int main() {
                 scanf("%d", &rch);
                 rechID(rch,list,lng);
                 }else if (chrch==2){
-                    printf("pas ajoute");
+                    printf("entre le titre que vous voulez rechercher :  \n");
+                    scanf("%s", rh);
+                    rechTLT(rh,list,lng);
                 }
 
             }while(chrch!=1 && chrch!=2);
-
-
+        case 6 :
+            printf("le nombre total des taches est : %d" , count);
+            stats(list);
 
         case 7 :
             system("exit");
