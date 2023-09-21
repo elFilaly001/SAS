@@ -14,9 +14,6 @@ typedef struct List {
 
 void Ajouter(int a, Lst list[], int *count) {
     int n= *count +1;
-    time_t currentTime;
-    time(&currentTime);
-
 
     for (int i = 0; i < a; i++) {
         list[*count].Id=n;
@@ -28,13 +25,8 @@ void Ajouter(int a, Lst list[], int *count) {
         gets(list[*count].desc);
 
         do {
-            printf("deadline (dd/mm/yyyy): ");
-            scanf("%d/%d/%d", &list[*count].deadline.tm_mday, &list[*count].deadline.tm_mon, &list[*count].deadline.tm_year);
-            struct tm inputDate = list[*count].deadline;
-            time_t inputTime = mktime(&inputDate);
-            if (inputTime < currentTime) {
-                printf("Please enter a date after the current date.\n");
-            }
+    printf("deadline (dd/mm/yyyy): ");
+    scanf("%d/%d/%d", &list[*count].deadline.tm_mday, &list[*count].deadline.tm_mon, &list[*count].deadline.tm_year);
 } while (
     (list[*count].deadline.tm_mday < 1 || list[*count].deadline.tm_mday > 31) ||
     (list[*count].deadline.tm_mon < 1 || list[*count].deadline.tm_mon > 12) ||
@@ -52,7 +44,9 @@ void Ajouter(int a, Lst list[], int *count) {
 }
 
 void Aff(int a, Lst list[]) {
+
     for (int i = 0; i < a; i++) {
+
         printf("\n------------Task %d:\n", i + 1);
         printf("Id: %d\n", list[i].Id);
         printf("Titre: %s\n", list[i].title);
@@ -201,7 +195,7 @@ void stats(Lst list[],int lng){
 }
 
 int main() {
-    int S, nbr_ln, count = 0,index,rch,chrch,st;
+    int S, nbr_ln, count = 0,index,rch,chrch,af;
     Lst list[100];
     char rh[100];
     int lng = sizeof(list)/sizeof(list[0]);
@@ -243,6 +237,7 @@ int main() {
                 printf("rien a afficher veiller ajouter une tache");
             }else{
                 Aff(count, list);
+                printf ("2-trier par deadline\t3- trois jour deadline ");
             }
 
             break;
