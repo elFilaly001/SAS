@@ -1,16 +1,22 @@
+#include <dos.h>
 #include <stdio.h>
 #include<string.h>
 #include <stdlib.h>
 #include <time.h>
 
+
 typedef struct List {
     int Id,statue;
     char title[50], desc[50];
     struct tm deadline;
+
 } Lst;
 
 void Ajouter(int a, Lst list[], int *count) {
     int n= *count +1;
+    time_t currentTime;
+    time(&currentTime);
+
 
     for (int i = 0; i < a; i++) {
         list[*count].Id=n;
@@ -22,8 +28,13 @@ void Ajouter(int a, Lst list[], int *count) {
         gets(list[*count].desc);
 
         do {
-    printf("deadline (dd/mm/yyyy): ");
-    scanf("%d/%d/%d", &list[*count].deadline.tm_mday, &list[*count].deadline.tm_mon, &list[*count].deadline.tm_year);
+            printf("deadline (dd/mm/yyyy): ");
+            scanf("%d/%d/%d", &list[*count].deadline.tm_mday, &list[*count].deadline.tm_mon, &list[*count].deadline.tm_year);
+            struct tm inputDate = list[*count].deadline;
+            time_t inputTime = mktime(&inputDate);
+            if (inputTime < currentTime) {
+                printf("Please enter a date after the current date.\n");
+            }
 } while (
     (list[*count].deadline.tm_mday < 1 || list[*count].deadline.tm_mday > 31) ||
     (list[*count].deadline.tm_mon < 1 || list[*count].deadline.tm_mon > 12) ||
@@ -175,9 +186,9 @@ void rechTLT(char rech[], Lst list[], int lng)
 }
 
 
-void stats(Lst list[]){
-    int c,f;
-    for (int i=0;i<list;i++){
+void stats(Lst list[],int lng){
+    int c=0,f=0;
+    for (int i=0;i<lng;i++){
         if(list[i].statue==3){
             c++;
         }
@@ -185,8 +196,8 @@ void stats(Lst list[]){
             f++;
         }
     }
-    printf("le nombre de TASK fini s'ont : %d" , c);
-    printf("le nombre de TASK non fini s'ont : %d", f);
+    printf("le nombre de TASK fini s'ont : %d \n" , c);
+    printf("le nombre de TASK non fini s'ont : %d \n", f);
 }
 
 int main() {
@@ -194,6 +205,7 @@ int main() {
     Lst list[100];
     char rh[100];
     int lng = sizeof(list)/sizeof(list[0]);
+    struct dat;
 
     do {
         choix();
@@ -252,8 +264,8 @@ int main() {
 
             }while(chrch!=1 && chrch!=2);
         case 6 :
-            printf("le nombre total des taches est : %d" , count);
-            stats(list);
+            printf("le nombre total des TASKS est : %d \n" , count);
+            stats(list,lng);
 
         case 7 :
             system("exit");
