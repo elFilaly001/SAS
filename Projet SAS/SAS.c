@@ -115,41 +115,71 @@ void modifier(int index ,int a, Lst list[]){
 }
 
 
-void sup(int index , Lst list[]){
-    for (int i = index; i < index- 1 ; i++) {
+void sup(int index , Lst list[],int lng, int *count){
+
+    for (int i = index -1; i < index ; i++){
         list[i] = list[i + 1];
     }
+  (*count)--;
 }
 
 
-void rech(int rech, Lst list[])
+void rechID(int rech, Lst list[], int lng)
 {
-    int index = 0;
-
-    int lng = sizeof(list)/sizeof(list[0]);
-
     for (int i = 0; i < lng; i++)
     {
-
         if (rech == list[i].Id)
         {
-            printf("index = %d \n", i);
-            printf("valeur = %d \n", list[i]);
-            index = i;
-            break;
+            printf("---------------------TASK%d\n",i+1);
+            printf("ID = %d\n", list[i].Id);
+            printf("titre = %s\n", list[i].title);
+            printf("Description: %s\n", list[i].desc);
+            printf("Date de depart: %d/%d/%d\n",list[i].deadline.tm_mday,list[i].deadline.tm_mon,list[i].deadline.tm_year);
+            if (list[i].statue==1){
+                printf("statue : a realiser\n");
+            }else if (list[i].statue==2){
+                printf("statue : en cours de realisation\n");
+            }else if (list[i].statue==3){
+                printf("statue : finalisee\n\n");
+            }
+            break ;
         }
-        else
+
+    }
+
+}
+
+/*void rechTLT(char rech[], Lst list[], int lng)
+{
+    for (int i = 0; i < lng; i++)
+    {
+        if (rech[] == list[i].title)
         {
-            printf("no value");
+            printf("ID = %d\n", list[i].Id);
+            printf("titre = %s\n", list[i].title);
+            printf("Description: %s\n", list[i].desc);
+            printf("Date de depart: %d/%d/%d\n",list[i].deadline.tm_mday,list[i].deadline.tm_mon,list[i].deadline.tm_year);
+            if (list[i].statue==1){
+                printf("statue : a realiser\n");
+            }else if (list[i].statue==2){
+                printf("statue : en cours de realisation\n");
+            }else if (list[i].statue==3){
+                printf("statue : finalisee\n");
+            }
+
+
         }
     }
-}
+
+}*/
+
 
 
 
 int main() {
-    int S, nbr_ln, count = 0,index;
+    int S, nbr_ln, count = 0,index,rch,chrch;
     Lst list[100];
+    int lng = sizeof(list)/sizeof(list[0]);
 
     do {
         choix();
@@ -180,7 +210,7 @@ int main() {
             }
             printf("entrer l'index que vous voulez modifier \n");
             scanf("%d", &index);
-            sup(index,list);
+            sup(index,list,lng,&count);
 
         case 4:
             if(count<=0){
@@ -192,10 +222,20 @@ int main() {
             break;
 
         case 5 :
-            printf("entre que vous voulez rechercher :  ");
-            scanf("%d", &rech);
+            printf("1-cherecher par ID\t2-chercher par titre\n");
+            scanf("%d",&chrch);
 
-            res
+            do {
+                if(chrch==1){
+                printf("entre ID que vous voulez rechercher :  \n");
+                scanf("%d", &rch);
+                rechID(rch,list,lng);
+                }else if (chrch==2){
+                    printf("pas ajoute");
+                }
+
+            }while(chrch!=1 && chrch!=2);
+
 
 
         case 7 :
