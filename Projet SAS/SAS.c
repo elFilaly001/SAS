@@ -19,17 +19,20 @@ void Ajouter(int a, Lst list[], int *count) {
         getchar();
         printf("description : ");
         gets(list[*count].desc);
-        printf("deadline : ");
-        scanf( "%d/%d/%d", &list[*count].deadline.tm_mday,&list[*count].deadline.tm_mon,&list[*count].deadline.tm_year);
-        printf("statue : ");
-        printf("1- a realiser\t 2-en cours\t 3-finalisee\n");
-        scanf("%d",&list[*count].statue);
 
-        while(list[*count].statue >3 || list[*count].statue<1){
+        do {
+    printf("deadline (dd/mm/yyyy): ");
+    scanf("%d/%d/%d", &list[*count].deadline.tm_mday, &list[*count].deadline.tm_mon, &list[*count].deadline.tm_year);
+} while (
+    (list[*count].deadline.tm_mday < 1 || list[*count].deadline.tm_mday > 31) ||
+    (list[*count].deadline.tm_mon < 1 || list[*count].deadline.tm_mon > 12) ||
+    (list[*count].deadline.tm_year < 2000));
+        do {
             printf("statue : ");
             printf("1- a realiser\t 2-en cours\t 3-finalisee\n");
             scanf("%d",&list[*count].statue);
-        }
+        }while(list[*count].statue >3 || list[*count].statue<1);
+
 
         (*count)++;
         n++;
@@ -68,27 +71,41 @@ void choix(){
 
 void modifier(int index ,int a, Lst list[]){
 
-    int ch,d,m,y;
-    char tr[100] , des[100] , space[100];
+    int st,ch,d,m,y;
+    char des[100];
 
 
-    printf("1-modifier le titre \t2-modifier la description\t3-modifer deadline\n");
+    printf("1-modifier statue\t2-modifier la description\t3-modifer deadline\n");
     scanf("%d",&ch);
     while (ch < 1 || ch > 3){
         printf("Choix invalide. Veuillez entrer 1, 2 ou 3 : \n");
         scanf("%d",&ch);
     }
     if(ch==1){
-        printf("entrer le nouveaux titre\n");
-        scanf("%s", tr);
-        strcpy(list[index-1].title,tr);
+        printf("entrer la nouvelle statue\n\n");
+        printf("1- a realiser\t 2-en cours\t 3-finalisee\n");
+        scanf("%d",&st);
+
+        while(st >3 || st<1){
+            printf("statue : ");
+            printf("1- a realiser\t 2-en cours\t 3-finalisee\n");
+            scanf("%d",&st);
+        }
+        list[index-1].statue=st;
     }else if(ch==2){
         printf("entrer le nouvelle description\n");
         scanf("%s",des);
         strcpy(list[index-1].desc,des);
     }else if (ch==3){
-        printf("entrer le nouvelle deadline\n");
-        scanf("%d/%d/%d",&d,&m,&y);
+        do {
+        printf("Enter the new deadline (dd/mm/yyyy): ");
+        scanf("%d/%d/%d", &d, &m, &y);
+    } while (
+        (d < 1 || d > 31) ||
+        (m < 1 || m > 12) ||
+        (y < 2000)
+    );
+
         list[index-1].deadline.tm_mday=d;
         list[index-1].deadline.tm_mon=m;
         list[index-1].deadline.tm_year=y;
@@ -98,15 +115,38 @@ void modifier(int index ,int a, Lst list[]){
 }
 
 
-void sup(int index , int a , Lst list[]){
-    int lng = sizeof(list) / sizeof(list[0]);
-
-
-    for (int i = index ; i < lng ; i++)
-     {
-         list[i] = list[i+1];
-     }
+void sup(int index , Lst list[]){
+    for (int i = index; i < index- 1 ; i++) {
+        list[i] = list[i + 1];
+    }
 }
+
+
+void rech(int rech, Lst list[])
+{
+    int index = 0;
+
+    int lng = sizeof(list)/sizeof(list[0]);
+
+    for (int i = 0; i < lng; i++)
+    {
+
+        if (rech == list[i].Id)
+        {
+            printf("index = %d \n", i);
+            printf("valeur = %d \n", list[i]);
+            index = i;
+            break;
+        }
+        else
+        {
+            printf("no value");
+        }
+    }
+}
+
+
+
 int main() {
     int S, nbr_ln, count = 0,index;
     Lst list[100];
@@ -140,7 +180,7 @@ int main() {
             }
             printf("entrer l'index que vous voulez modifier \n");
             scanf("%d", &index);
-            sup(index,count,list);
+            sup(index,list);
 
         case 4:
             if(count<=0){
@@ -149,6 +189,17 @@ int main() {
                 Aff(count, list);
             }
 
+            break;
+
+        case 5 :
+            printf("entre que vous voulez rechercher :  ");
+            scanf("%d", &rech);
+
+            res
+
+
+        case 7 :
+            system("exit");
             break;
     }
     } while (S!=0);
