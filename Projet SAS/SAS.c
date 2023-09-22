@@ -1,4 +1,3 @@
-#include <dos.h>
 #include <stdio.h>
 #include<string.h>
 #include <stdlib.h>
@@ -30,7 +29,7 @@ void Ajouter(int a, Lst list[], int *count) {
 } while (
     (list[*count].deadline.tm_mday < 1 || list[*count].deadline.tm_mday > 31) ||
     (list[*count].deadline.tm_mon < 1 || list[*count].deadline.tm_mon > 12) ||
-    (list[*count].deadline.tm_year < 2000) );
+    (list[*count].deadline.tm_year < 2000)  );
         do {
             printf("statue : ");
             printf("1- a realiser\t 2-en cours\t 3-finalisee\n");
@@ -123,8 +122,9 @@ void modifier(int index ,int a, Lst list[]){
         }
         list[index-1].statue=st;
     }else if(ch==2){
+        getchar();
         printf("entrer le nouvelle description\n");
-        scanf("%s",des);
+        gets(des);
         strcpy(list[index-1].desc,des);
     }else if (ch==3){
         do {
@@ -255,7 +255,7 @@ void Tri_jr(int a , Lst list[]){
         date.tm_year = list[i].deadline.tm_year-1900;
         time_t ts = mktime(&date);
         int dy = (ts - t)/ (24 * 60 * 60);
-        if (dy > 0 && dy < 3)
+        if (dy==0 || dy==3 || dy==1 || dy==2)
         {
             printf("---------------------TASK%d\n",i+1);
             printf("ID = %d\n", list[i].Id);
