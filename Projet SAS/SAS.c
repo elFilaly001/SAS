@@ -30,7 +30,7 @@ void Ajouter(int a, Lst list[], int *count) {
 } while (
     (list[*count].deadline.tm_mday < 1 || list[*count].deadline.tm_mday > 31) ||
     (list[*count].deadline.tm_mon < 1 || list[*count].deadline.tm_mon > 12) ||
-    (list[*count].deadline.tm_year < 2000));
+    (list[*count].deadline.tm_year < 2000) );
         do {
             printf("statue : ");
             printf("1- a realiser\t 2-en cours\t 3-finalisee\n");
@@ -45,8 +45,8 @@ void Ajouter(int a, Lst list[], int *count) {
 
 void Aff(int a, Lst list[]) {
 
+    struct tm date={0};
     for (int i = 0; i < a; i++) {
-
         printf("\n------------Task %d:\n", i + 1);
         printf("Id: %d\n", list[i].Id);
         printf("Titre: %s\n", list[i].title);
@@ -59,8 +59,32 @@ void Aff(int a, Lst list[]) {
         }else if (list[i].statue==3){
             printf("statue : finalisee\n");
         }
-    }
+        date.tm_mday=list[i].deadline.tm_mday;
+        date.tm_mon = list[i].deadline.tm_mon-1;
+        date.tm_year = list[i].deadline.tm_year-1900;
+        time_t timeInSeconds = mktime(&date);
+        }
 }
+
+
+void Tri_alpha(Lst list[],int a)
+{
+    Lst lstt;
+    for(int i=0; i<a; i++)
+    {
+        for(int j=i+1; j<a; j++)
+        {
+            if(strcmp(list[i].title,list[j].title)>0)
+            {
+                lstt=list[i];
+                list[i]=list[j];
+                list[j]=lstt;
+            }
+        }
+    }
+    Aff(a,list);
+}
+
 
 void choix(){
         printf("\n*********ToDo_List**********\n");
@@ -130,8 +154,7 @@ void sup(int index , Lst list[],int lng, int *count){
 }
 
 
-void rechID(int rech, Lst list[], int lng)
-{
+void rechID(int rech, Lst list[], int lng){
     for (int i = 0; i < lng; i++)
     {
         if (rech == list[i].Id)
@@ -155,8 +178,7 @@ void rechID(int rech, Lst list[], int lng)
 
 }
 
-void rechTLT(char rech[], Lst list[], int lng)
-{
+void rechTLT(char rech[], Lst list[], int lng){
     for (int i = 0; i < lng; i++)
     {
         if (strcmp(rech,list[i].title)==0)
@@ -186,12 +208,110 @@ void stats(Lst list[],int lng){
         if(list[i].statue==3){
             c++;
         }
-        else if (list[i].statue==1 || list[i].statue==2){
+        if (list[i].statue==1 || list[i].statue==2){
             f++;
         }
     }
     printf("le nombre de TASK fini s'ont : %d \n" , c);
-    printf("le nombre de TASK non fini s'ont : %d \n", f);
+    printf("le nombre de TASK non fini s'ont : %d \n", f-1);
+}
+
+
+void Tri_dead (int a , Lst list[]){
+    struct tm date={0};
+    Lst lstt;
+
+    for (int i = 0; i < a; i++) {
+        date.tm_mday=list[i].deadline.tm_mday;
+        date.tm_mon = list[i].deadline.tm_mon-1;
+        date.tm_year = list[i].deadline.tm_year-1900;
+        time_t ts = mktime(&date);
+        for (int j=i+1 ; j<a ; j++ ){
+            date.tm_mday=list[j].deadline.tm_mday;
+            date.tm_mon = list[j].deadline.tm_mon-1;
+            date.tm_year = list[j].deadline.tm_year-1900;
+            time_t ts2 = mktime(&date);
+            if (ts > ts2){
+                lstt=list[i];
+                list[i]=list[j];
+                list[j]=lstt;
+            }
+        }
+        }
+        Aff(a,list);
+}
+
+
+void Tri_jr(int a , Lst list[]){
+
+    struct tm date={0};
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+    t += 3 * 24 * 60 * 60;
+    for (int i = 0; i < a; i++)
+    {
+        date.tm_mday=list[i].deadline.tm_mday;
+        date.tm_mon = list[i].deadline.tm_mon-1;
+        date.tm_year = list[i].deadline.tm_year-1900;
+        time_t ts = mktime(&date);
+        if (ts<=t)
+        {
+            printf("---------------------TASK%d\n",i+1);
+            printf("ID = %d\n", list[i].Id);
+            printf("titre = %s\n", list[i].title);
+            printf("Description: %s\n", list[i].desc);
+            printf("Date de depart: %d/%d/%d\n",list[i].deadline.tm_mday,list[i].deadline.tm_mon,list[i].deadline.tm_year);
+            if (list[i].statue==1){
+                printf("statue : a realiser\n");
+            }else if (list[i].statue==2){
+                printf("statue : en cours de realisation\n");
+            }else if (list[i].statue==3){
+                printf("statue : finalisee\n\n");
+            }
+        }
+
+    }
+}
+
+
+void j_rst(int a,Lst list[])
+{
+    struct tm date= {0};
+    time_t t = time(NULL);
+    struct tm *tm = localtime(&t);
+    for (int i = 0; i < a; i++)
+    {
+        date.tm_mday=list[i].deadline.tm_mday;
+        date.tm_mon = list[i].deadline.tm_mon-1;
+        date.tm_year = list[i].deadline.tm_year-1900;
+        time_t ts = mktime(&date);
+        printf("---------------------TASK%d\n",i+1);
+        printf("ID = %d\n", list[i].Id);
+        printf("titre = %s\n", list[i].title);
+        printf("Description: %s\n", list[i].desc);
+        printf("Date de depart: %d/%d/%d\n",list[i].deadline.tm_mday,list[i].deadline.tm_mon,list[i].deadline.tm_year);
+        if (list[i].statue==1)
+        {
+            printf("statue : a realiser\n");
+        }
+        else if (list[i].statue==2)
+        {
+            printf("statue : en cours de realisation\n");
+        }
+        else if (list[i].statue==3)
+        {
+            printf("statue : finalisee\n\n");
+        }
+        int dy = (ts - t)/ (24 * 60 * 60);
+        if (dy==0){
+            printf("attontion le dellee est aujourd'hui\n");
+        }else if (dy<0){
+            printf("dele est passe\n");
+        }else{
+            printf("%d jour \n",dy);
+        }
+
+    }
 }
 
 int main() {
@@ -237,7 +357,16 @@ int main() {
                 printf("rien a afficher veiller ajouter une tache");
             }else{
                 Aff(count, list);
-                printf ("2-trier par deadline\t3- trois jour deadline ");
+                printf ("1-trier par alphabet\t2-trier par deadline\t3- trois jour deadline\n");
+                scanf("%d",&af);
+                if (af==1){
+                    Tri_alpha(list,count);
+                }else if (af==2){
+                    Tri_dead(count,list);
+                }else if (af==3){
+                    Tri_jr(count,list);
+                }
+
             }
 
             break;
@@ -261,9 +390,10 @@ int main() {
         case 6 :
             printf("le nombre total des TASKS est : %d \n" , count);
             stats(list,lng);
+            j_rst(count,list);
 
         case 7 :
-            system("exit");
+            return 0 ;
             break;
     }
     } while (S!=0);
