@@ -247,14 +247,15 @@ void Tri_jr(int a , Lst list[]){
     struct tm date={0};
     time_t t = time(NULL);
     struct tm *tm = localtime(&t);
-    t += 3 * 24 * 60 * 60;
+
     for (int i = 0; i < a; i++)
     {
         date.tm_mday=list[i].deadline.tm_mday;
         date.tm_mon = list[i].deadline.tm_mon-1;
         date.tm_year = list[i].deadline.tm_year-1900;
         time_t ts = mktime(&date);
-        if (ts<=t)
+        int dy = (ts - t)/ (24 * 60 * 60);
+        if (dy > 0 && dy < 3)
         {
             printf("---------------------TASK%d\n",i+1);
             printf("ID = %d\n", list[i].Id);
@@ -306,7 +307,7 @@ void j_rst(int a,Lst list[])
         if (dy==0){
             printf("attontion le dellee est aujourd'hui\n");
         }else if (dy<0){
-            printf("dele est passe\n");
+            printf("delet est passe %d \n", dy);
         }else{
             printf("%d jour \n",dy);
         }
@@ -387,10 +388,12 @@ int main() {
                 }
 
             }while(chrch!=1 && chrch!=2);
+            break;
         case 6 :
             printf("le nombre total des TASKS est : %d \n" , count);
             stats(list,lng);
             j_rst(count,list);
+            break ;
 
         case 7 :
             return 0 ;
